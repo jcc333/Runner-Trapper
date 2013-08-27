@@ -1,12 +1,12 @@
 module Distances where
+import Data.Time
 
 mileToKmConversionRate = 1.60934
 meterToKmConversionRate = 1000
 
-
-data Distance = Miles Double
-              | Meters Double
-              | Kilometers Double
+data Distance = Miles DiffTime
+              | Meters DiffTime
+              | Kilometers DiffTime
 
 toMiles distance = case distance of
   Miles n -> Miles n
@@ -23,25 +23,25 @@ toMeters distance = case distance of
   Meters n -> Meters n
   Kilometers n -> Meters $ n * meterToKmConversionRate
 
-toDouble distance = case distance of
+toNumber distance = case distance of
   Miles n -> n
   Meters n -> n
   Kilometers n -> n
 
-milesDouble = toDouble.toMiles
+milesNumber = toNumber.toMiles
 
-metersDouble = toDouble.toMeters
+metersNumber = toNumber.toMeters
 
-kilometersDouble = toDouble.toKilometers
+kmNumber = toNumber.toKilometers
 
 instance Eq Distance where
   (==) (Meters a) (Meters b) = a == b
-  (==) left right = (toMeters left) == (toMeters right)
+  (==) left right = (metersNumber left) == (metersNumber right)
 
 instance Ord Distance where
-  compare left right = compare leftDouble rightDouble
-    where leftDouble = metersDouble left
-          rightDouble = metersDouble right
+  compare left right = compare leftNumber rightNumber
+    where leftNumber = metersNumber left
+          rightNumber = metersNumber right
 
 instance Show Distance where
   show distance = case distance of
